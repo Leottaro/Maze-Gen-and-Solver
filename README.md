@@ -25,8 +25,9 @@ Then we pick a wall randomly and check if the two cells next to it have a differ
 If this is the case, we unify the cells by giving them the smallest number. <br/>
 Using this technique the numbers of ways and walls are fixed by: <br/>
 - walls: 0.5(Width*Height +Width +Height) -1.5 <br/>
-- ways:  0.5(Width*Height -Width -Height) +1.5 <br/>
-we simply count the number of ways at the beginning and add 1 each time we break a wall. <br/>
+- ways:  0.5(Width*Height -Width -Height) +1.5 
+
+we just have to count the number of ways at the beginning and add 1 each time we break a wall. <br/>
 Our maze is done when the number of counted ways is equal tu the equation above. <br/>
 
 ![generation](./Assets/generation.gif)
