@@ -1,6 +1,4 @@
 from random import randint
-from time import sleep
-import tkinter as tk
 
 class Maze:
     def __init__(self, width, height):
@@ -20,8 +18,8 @@ class Maze:
         """
     
     def __str__(self):
-        return "\n".join([" ".join([str(obj) for obj in line]) for line in self.__grid]) + "\n"
         return "\n".join([" ".join(["#" if obj==0 else "." if obj==2 else " " for obj in line]) for line in self.__grid])
+        #return "\n".join([" ".join([str(obj) for obj in line]) for line in self.__grid]) + "\n"
 
     def getgrid(self):
         return self.__grid    
@@ -30,7 +28,6 @@ class Maze:
         if 0 <= x < self.W and 0 <= y < self.H:
             return self.__grid[y][x]
         elif warn: print("getcell out of range")
-        return 0
     
     def setcell(self, x, y, obj, warn = True):
         if x < self.W and y < self.H:
@@ -61,17 +58,17 @@ class Maze:
                 while x%2 == y%2:
                     y = randint(1,self.H-2)
 
-                if x%2 == 0:        # le mur est vertical, cases à gauche et à droite
+                if x%2 == 0:
                     cell1 = self.getcell(x-1, y)
                     cell2 = self.getcell(x+1, y)
-                else:               # le mur est horizontal, cases en haut es en bas
+                else:
                     cell1 = self.getcell(x, y-1)
                     cell2 = self.getcell(x, y+1)
                 
-            if cell1 > cell2:    # pour qu'il ne reste que des uns à la fin
+            if cell1 > cell2:
                 cell1, cell2 = cell2, cell1
             
-            self.__Unify__(x, y, cell2, cell1)    # one unifie les cases des deux cotes du mur
+            self.__Unify__(x, y, cell2, cell1)
         
         self.__generated = True
     
@@ -113,24 +110,27 @@ class Maze:
             if not self.__resolved:
                 self.setcell(x, y, 1)
 
-while True:
-    size = input("quelle taille (largeur'x'hauteur ou 'taille') ? ")
-    if len([i for i in size.split("x") if i.isdigit()]) == 2:
-        Width, Height = [int(i) if int(i)%2==1 else int(i)+1 for i in size.split("x")]
-        break
-    elif size.isdigit():
-        Width = int(size)
-        Height = Width
-        break
-    elif len(size.split("x")) != 2:
-        print("il faut un format 'largeur'x'hauteur' comme 15x65 ou 'taille' comme 51 !\n")
-print("width:%s, height:%s" %(Width, Height))
 
 
-MyMaze = Maze(Width, Height)
+if __name__ == "__main__":
+    while True:
+        size = input("quelle taille (largeur'x'hauteur ou 'taille') ? ")
+        if len([i for i in size.split("x") if i.isdigit()]) == 2:
+            Width, Height = [int(i) if int(i)%2==1 else int(i)+1 for i in size.split("x")]
+            break
+        elif size.isdigit():
+            Width = int(size) if int(size)%2==1 else int(size)+1
+            Height = Width
+            break
+        elif len(size.split("x")) != 2:
+            print("il faut un format 'largeur'x'hauteur' comme 15x65 ou 'taille' comme 51 !\n")
+    print("width:%s, height:%s" %(Width, Height))
 
-MyMaze.Generate_v2()
-print(MyMaze)
-input()
-MyMaze.Resolve()
-print(MyMaze)
+
+    MyMaze = Maze(Width, Height)
+
+    MyMaze.Generate_v2()
+    print(MyMaze, end="\n\n")
+    
+    MyMaze.Resolve()
+    print(MyMaze)
