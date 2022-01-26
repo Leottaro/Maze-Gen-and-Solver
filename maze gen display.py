@@ -63,7 +63,6 @@ class Maze:
         self.setcell(self.W-1, self.H-2, self.getcell(self.W-2, self.H-2))
         self.setRect(self.W-1, self.H-2, self.getRect(self.W-2, self.H-2))
         
-
         total_ways = 0.5*(self.W*self.H - self.W - self.H) + 1.5
         while self.__genState != total_ways:
             cell1 ,cell2 = 0, 0
@@ -132,6 +131,7 @@ class Maze:
                 self.setRect(x, y, "#11AA11")
 
 
+
 if __name__ == "__main__":
     while True:
         size = input("size ('widht'x'height') or 'size': ")
@@ -139,13 +139,12 @@ if __name__ == "__main__":
             Width, Height = [int(i) if int(i)%2==1 else int(i)+1 for i in size.split("x")]
             break
         elif size.isdigit():
-            Width = int(size)
+            Width = int(size) if int(size)%2==1 else int(size)+1
             Height = Width
             break
         elif len(size.split("x")) != 2:
             print("I need a 'width'x'height' format like '51x25' or '51'\n")
     print("width:%s, height:%s" %(Width, Height))
-
 
 
     MyWindow = tk.Tk()
