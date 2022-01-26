@@ -1,5 +1,4 @@
 from random import randint
-from time import sleep
 import tkinter as tk
 
 class Maze:
@@ -24,7 +23,7 @@ class Maze:
 
     def __str__(self):
         return "\n".join([" ".join(["#" if obj==0 else "." if obj==2 else " " for obj in line]) for line in self.__grid])
-        return "\n".join([" ".join([str(obj) for obj in line]) for line in self.__grid])
+        #return "\n".join([" ".join([str(obj) for obj in line]) for line in self.__grid])
 
     def getgrid(self):
         return self.__grid    
@@ -33,7 +32,6 @@ class Maze:
         if 0 <= x < self.W and 0 <= y < self.H:
             return self.__grid[y][x]
         elif warn: print("getcell out of range")
-        return 0
     
     def setcell(self, x, y, obj, warn = True):
         if x < self.W and y < self.H:
@@ -49,7 +47,6 @@ class Maze:
 
 
     def Generate_v2(self):
-        # on génère une grille puis on casse l'entrée et la sortie
         i = 0
         for y in range(self.H):
             for x in range(self.W):
@@ -65,10 +62,8 @@ class Maze:
         self.setRect(0, 1, self.getRect(1, 1), False)
         self.setcell(self.W-1, self.H-2, self.getcell(self.W-2, self.H-2))
         self.setRect(self.W-1, self.H-2, self.getRect(self.W-2, self.H-2))
+        
 
-        input()
-
-        # on choisi un mur aléatoire, on casse le mur et on unifie les deux cotés
         total_ways = 0.5*(self.W*self.H - self.W - self.H) + 1.5
         while self.__genState != total_ways:
             cell1 ,cell2 = 0, 0
@@ -79,17 +74,17 @@ class Maze:
                 while x%2 == y%2:
                     y = randint(1,self.H-2)
 
-                if x%2 == 0:        # le mur est vertical, cases à gauche et à droite
+                if x%2 == 0:
                     cell1 = self.getcell(x-1, y)
                     cell2 = self.getcell(x+1, y)
-                else:               # le mur est horizontal, cases en haut es en bas
+                else:
                     cell1 = self.getcell(x, y-1)
                     cell2 = self.getcell(x, y+1)
                 
-            if cell1 > cell2:    # pour qu'il ne reste que des uns à la fin
+            if cell1 > cell2:
                 cell1, cell2 = cell2, cell1
             
-            self.__Unify__(x, y, cell2, cell1)    # one unifie les cases des deux cotes du mur
+            self.__Unify__(x, y, cell2, cell1)
             self.setRect(x, y, "#EEEEEE")
         
         self.__generated = True
@@ -112,14 +107,10 @@ class Maze:
     def Resolve(self):
         if not self.__generated: print("can't resolve a not generated maze !")
         else:
-            # on part du départ et on teste toutes les cases récursivement puis, une fois la fin atteinte, les cases testées a ce moment sont le chemin
-            # cette méthode ne trouve pas forcément le chemin le plus court mais elle est bien
-            # plus rapide et cela reviens au même si le labirynthe n'est pas complexe.
             self.__Res__(0, 1)
     
     def __Res__(self, x, y):
         if not self.__resolved:
-            sleep(1/3)
             if x == self.W-1 and y == self.H-2: self.__resolved = True
 
             self.setcell(x, y, 2)
